@@ -65,22 +65,32 @@ open up you local host and port
 ### dagshub
 [dagshub](https://dagshub.com/)
 
-MLFLOW_TRACKING_URI=https://dagshub.com/entbappy/Kidney-Disease-Classification-MLflow-DVC.mlflow \
-MLFLOW_TRACKING_USERNAME=entbappy \
-MLFLOW_TRACKING_PASSWORD=6824692c47a369aa6f9eac5b10041d5c8edbcef0 \
+MLFLOW_TRACKING_URI=https://dagshub.com/sneharkive/Kidney-Disease-Classification-DL.mlflow \
+MLFLOW_TRACKING_USERNAME=sneharkive \
+MLFLOW_TRACKING_PASSWORD=<MLFLOW_TRACKING_PASSWORD> \
 python script.py
 
 Run this to export as env variables:
 
 ```bash
 
-export MLFLOW_TRACKING_URI=https://dagshub.com/entbappy/Kidney-Disease-Classification-MLflow-DVC.mlflow
+export MLFLOW_TRACKING_URI=https://dagshub.com/sneharkive/Kidney-Disease-Classification-DL.mlflow
 
-export MLFLOW_TRACKING_USERNAME=entbappy 
+export MLFLOW_TRACKING_USERNAME=sneharkive 
 
-export MLFLOW_TRACKING_PASSWORD=6824692c47a369aa6f9eac5b10041d5c8edbcef0
+export MLFLOW_TRACKING_PASSWORD=<MLFLOW_TRACKING_PASSWORD>
 
 ```
+
+
+To set the value permanent
+```shell
+setx MLFLOW_TRACKING_URI "https://dagshub.com/sneharkive/Kidney-Disease-Classification-DL.mlflow"
+setx MLFLOW_TRACKING_USERNAME "sneharkive"
+setx MLFLOW_TRACKING_PASSWORD <MLFLOW_TRACKING_PASSWORD>
+
+```
+need full restart of terminal after this
 
 
 ### DVC cmd
