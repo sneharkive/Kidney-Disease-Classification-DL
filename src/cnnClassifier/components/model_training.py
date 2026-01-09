@@ -5,6 +5,8 @@ import tensorflow as tf
 import time
 from pathlib import Path
 from cnnClassifier.entity.config_entity import TrainingConfig
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+import math
 
 
 class Training:
@@ -51,6 +53,8 @@ class Training:
                 zoom_range=0.2,
                 **datagenerator_kwargs
             )
+
+
         else:
             train_datagenerator = valid_datagenerator
 
@@ -70,15 +74,38 @@ class Training:
 
 
     def train(self):
-        self.steps_per_epoch = self.train_generator.samples // self.train_generator.batch_size
-        self.validation_steps = self.valid_generator.samples // self.valid_generator.batch_size
+        # self.steps_per_epoch = self.train_generator.samples // self.train_generator.batch_size
+        # self.validation_steps = self.valid_generator.samples // self.valid_generator.batch_size
+
+        # self.model.fit(
+        #     self.train_generator,
+        #     epochs=self.config.params_epochs,
+        #     steps_per_epoch=self.steps_per_epoch,
+        #     validation_steps=self.validation_steps,
+        #     validation_data=self.valid_generator
+        # )
+
+
+        self.steps_per_epoch = math.ceil(
+            self.train_generator.samples / self.train_generator.batch_size
+        )
+
+        self.validation_steps = math.ceil(
+            self.valid_generator.samples / self.valid_generator.batch_size
+        )
+
+        callbacks = [
+            EarlyStopping(monitor="val_loss", patience=5, restore_best_weights=True),
+            ReduceLROnPlateau(monitor="val_loss", factor=0.3, patience=3, min_lr=1e-6)
+        ]
 
         self.model.fit(
             self.train_generator,
             epochs=self.config.params_epochs,
             steps_per_epoch=self.steps_per_epoch,
             validation_steps=self.validation_steps,
-            validation_data=self.valid_generator
+            validation_data=self.valid_generator,
+            callbacks=callbacks
         )
 
         self.save_model(
