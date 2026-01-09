@@ -1,10 +1,21 @@
+from dotenv import load_dotenv
+from pathlib import Path
+
+env_path = Path(".env")
+load_dotenv(env_path)
+
+
 from cnnClassifier import logger
 from cnnClassifier.pipeline.stage_01_data_ingestion import DataIngestionTrainingPipeline
 from cnnClassifier.pipeline.stage_02_prepare_base_model import PrepareBaseModelTrainingPipeline
-# from cnnClassifier.pipeline.stage_03_model_training import ModelTrainingPipeline
-# from cnnClassifier.pipeline.stage_04_model_evaluation import EvaluationPipeline
+from cnnClassifier.pipeline.stage_03_model_training import ModelTrainingPipeline
+from cnnClassifier.pipeline.stage_04_model_evaluation import EvaluationPipeline
 
+import mlflow
+import os
 
+# print("MLFLOW URI:", os.getenv("MLFLOW_TRACKING_URI"))
+mlflow.set_tracking_uri(os.getenv("MLFLOW_TRACKING_URI"))
 
 
 STAGE_NAME = "Data Ingestion stage"
@@ -38,8 +49,8 @@ STAGE_NAME = "Training"
 try:
    logger.info(f"*******************")
    logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
-   # model_trainer = ModelTrainingPipeline()
-   # model_trainer.main()
+   model_trainer = ModelTrainingPipeline()
+   model_trainer.main()
    logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
 except Exception as e:
         logger.exception(e)
@@ -48,15 +59,15 @@ except Exception as e:
 
 
 
-# STAGE_NAME = "Evaluation stage"
-# try:
-#    logger.info(f"*******************")
-#    logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
-#    # model_evalution = EvaluationPipeline()
-#    # model_evalution.main()
-#    logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
-#
-# except Exception as e:
-#         logger.exception(e)
-#         raise e
+STAGE_NAME = "Evaluation stage"
+try:
+   logger.info(f"*******************")
+   logger.info(f">>>>>> stage {STAGE_NAME} started <<<<<<")
+   model_evaluation = EvaluationPipeline()
+   model_evaluation.main()
+   logger.info(f">>>>>> stage {STAGE_NAME} completed <<<<<<\n\nx==========x")
+
+except Exception as e:
+        logger.exception(e)
+        raise e
 
