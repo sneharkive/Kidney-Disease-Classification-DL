@@ -4,8 +4,8 @@ load_dotenv()
 from flask import Flask, request, jsonify, render_template
 import os
 from flask_cors import CORS, cross_origin
-from cnnClassifier.utils.common import decodeImage
-from cnnClassifier.pipeline.prediction import PredictionPipeline
+from src.cnnClassifier.utils.common import decodeImage
+from src.cnnClassifier.pipeline.prediction import PredictionPipeline
 
 
 
@@ -21,7 +21,13 @@ class ClientApp:
         self.filename = "inputImage.jpg"
         self.classifier = PredictionPipeline(self.filename)
 
-clApp = ClientApp()
+clApp = None
+
+@app.before_first_request
+def load_model():
+    global clApp
+    clApp = ClientApp()
+
 
 @app.route("/", methods=['GET'])
 @cross_origin()
@@ -29,6 +35,9 @@ def home():
     return render_template('index.html')
 
 
+@app.route("/health")
+def health():
+    return "OK", 200
 
 
 # @app.route("/train", methods=['GET','POST'])
