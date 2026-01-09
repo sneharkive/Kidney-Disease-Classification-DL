@@ -1,0 +1,16 @@
+tensorflow-cpu==2.12.0
+numpy
+pandas
+scipy
+Flask
+Flask-Cors
+python-dotenv
+gdown
+joblib
+gunicorn
+python-box
+PyYAML
+tqdm
+ensure
+Pillow
+
