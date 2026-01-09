@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from flask import Flask, request, jsonify, render_template
 import os
 from flask_cors import CORS, cross_origin
@@ -18,6 +21,7 @@ class ClientApp:
         self.filename = "inputImage.jpg"
         self.classifier = PredictionPipeline(self.filename)
 
+clApp = ClientApp()
 
 @app.route("/", methods=['GET'])
 @cross_origin()
@@ -36,29 +40,54 @@ def home():
 
 
 
+# @app.route("/predict", methods=['POST'])
+# @cross_origin()
+# def predictRoute():
+#     # image = request.json['image']
+#     try:
+#         data = request.get_json()
+#
+#         if data is None or 'image' not in data:
+#             return jsonify({"error": "No image found in request"}), 400
+#
+#         image = data['image']
+#
+#         decodeImage(image, clApp.filename)
+#         result = clApp.classifier.predict()
+#         return jsonify(result)
+#     except Exception as e:
+#         return jsonify({
+#             "error": str(e)
+#         }), 500
+
+
 @app.route("/predict", methods=['POST'])
 @cross_origin()
 def predictRoute():
-    # image = request.json['image']
     try:
-        data = request.get_json()
+        # Case 1: JSON (Base64)
+        data = request.get_json(silent=True)
+        if data and "image" in data:
+            image = data["image"]
+            decodeImage(image, clApp.filename)
 
-        if data is None or 'image' not in data:
-            return jsonify({"error": "No image found in request"}), 400
+        # Case 2: File upload (form-data)
+        elif "file" in request.files:
+            file = request.files["file"]
+            file.save(clApp.filename)
 
-        image = data['image']
+        else:
+            return jsonify({"error": "No image provided"}), 400
 
-        decodeImage(image, clApp.filename)
         result = clApp.classifier.predict()
         return jsonify(result)
+
     except Exception as e:
-        return jsonify({
-            "error": str(e)
-        }), 500
+        print("ERROR:", e)
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":
-    clApp = ClientApp()
-
-    app.run(host='0.0.0.0', port=8080) #for AWS
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
 
