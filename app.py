@@ -23,10 +23,13 @@ class ClientApp:
 
 clApp = None
 
-@app.before_first_request
-def load_model():
+def get_model():
     global clApp
-    clApp = ClientApp()
+    if clApp is None:
+        print("Loading model...")
+        clApp = ClientApp()
+        print("Model loaded.")
+    return clApp
 
 
 @app.route("/", methods=['GET'])
@@ -74,27 +77,26 @@ def health():
 @cross_origin()
 def predictRoute():
     try:
-        # Case 1: JSON (Base64)
-        data = request.get_json(silent=True)
-        if data and "image" in data:
-            image = data["image"]
-            decodeImage(image, clApp.filename)
+        model = get_model()
 
-        # Case 2: File upload (form-data)
+        data = request.get_json(silent=True)
+
+        if data and "image" in data:
+            decodeImage(data["image"], model.filename)
+
         elif "file" in request.files:
             file = request.files["file"]
-            file.save(clApp.filename)
+            file.save(model.filename)
 
         else:
             return jsonify({"error": "No image provided"}), 400
 
-        result = clApp.classifier.predict()
+        result = model.classifier.predict()
         return jsonify(result)
 
     except Exception as e:
         print("ERROR:", e)
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
