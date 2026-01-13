@@ -130,4 +130,4 @@ The project is configured with GitHub Actions to automate deployment to AWS:
 
 ---
 
-Would you like me to help you configure the AWS S3 bucket for DVC remote storage?
+(Live At) [https://kidney-disease-classification-dl-1.onrender.com/]
