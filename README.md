@@ -10,8 +10,6 @@ You can access the live application here:
 
 ---
 
-Would you like me to help you format this into a "Live Demo" button or badge for your README?
-
 ## 📊 Model Performance & Metrics
 
 Based on the latest evaluation run, the model achieves the following performance:
