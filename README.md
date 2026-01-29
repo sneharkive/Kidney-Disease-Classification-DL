@@ -2,8 +2,15 @@
 
 This project is an end-to-end Deep Learning application designed to classify kidney CT scan images into **Tumor** or **Normal** categories. It follows MLOps best practices by using **DVC** for pipeline orchestration, **MLflow** for experiment tracking, and **GitHub Actions** for CI/CD deployment on AWS.
 
-**🚀 Live Link:** [https://text-summarization-nlp.onrender.com](https://text-summarization-nlp.onrender.com](https://kidney-disease-classification-dl-1.onrender.com/)
+## 🔗 Live Demo
 
+You can access the live application here:
+
+**[Kidney Disease Classification Web App](https://kidney-disease-classification-dl-1.onrender.com/)**
+
+---
+
+Would you like me to help you format this into a "Live Demo" button or badge for your README?
 
 ## 📊 Model Performance & Metrics
 
